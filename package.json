@@ -2,6 +2,7 @@
   "name": "v-block",
   "version": "0.0.1-vc.beta",
   "private": false,
+  "author": "zonebond",
   "dependencies": {
     "axios": "^0.16.2",
     "mobx": "^3.1.16",
