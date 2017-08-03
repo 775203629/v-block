@@ -1,0 +1,51 @@
+.for(@list, @code) {
+  & {
+    .loop(@i:1) when (@i =< length(@list)) {
+      @value: extract(@list, @i);
+      @code();
+      .loop(@i + 1);
+    }
+    .loop();
+  }
+}
+
+.generator-fonts() {
+  @sean: 'Arial', 'serif', 'sans-serif', '微软雅黑', '宋体', '黑体', 'monospace', 'cursive';
+  @list: 'Arial', 'serif', 'sans-serif', 'Microsoft YaHei', '宋体', '黑体', 'monospace', 'cursive';
+  .for(@list, { .ql-picker-label[data-value="@{value}"]::before {
+    content: extract(@sean, @i);
+    font-family: @value;
+  } .ql-picker-item[data-value="@{value}"]::before {
+      content: extract(@sean, @i);
+      font-family: @value;
+    } });
+}
+
+.generator-fonts();
+
+.generator-sizes() {
+  @list: '10px', '12px', '14px', '16px', '18px', '20px';
+  .for(@list, { .ql-picker-label[data-value="@{value}"]::before {
+    content: @value;
+    font-size: @value;
+  } .ql-picker-item[data-value="@{value}"]::before {
+      content: @value;
+      font-size: @value;
+    } });
+}
+
+.ql-snow {
+  & .ql-picker.ql-font {
+    & > .ql-picker-label:not(.ql-active)::before, .ql-picker-item:not(.ql-active)::before {
+      content: '字体';
+    }
+    .generator-fonts();
+  }
+  & .ql-picker.ql-size {
+    width: 60px;
+    & > .ql-picker-label:not(.ql-active)::before, .ql-picker-item:not(.ql-active)::before {
+      content: '字号';
+    }
+    .generator-sizes();
+  }
+}

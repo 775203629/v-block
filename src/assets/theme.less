@@ -1,0 +1,63 @@
+.mixin-flex(@grow: 1, @shrink: 1, @base: auto) {
+  flex: @grow @shrink @base;
+}
+
+// button
+.weui-btn {
+  border-radius: 3px;
+}
+
+@weuiBtnFontColor: #bababa;
+@weuiBtnPrimaryBg: #333333;
+@weuiBtnActiveFontColor: #333333;
+@weuiBtnPrimaryActiveBg: #bababa;
+.weui-btn_primary {
+  background-color: @weuiBtnPrimaryBg;
+  &:not(.weui-btn_disabled):visited {
+    color: @weuiBtnFontColor;
+  }
+  &:not(.weui-btn_disabled):active {
+    color: @weuiBtnActiveFontColor;
+    background-color: @weuiBtnPrimaryActiveBg;
+  }
+}
+
+@weuiBtnDisabledFontColor: rgba(255, 255, 255, .6);
+@weuiBtnPrimaryDisabledBg: #d7d7d7;
+.weui-btn_disabled {
+  color: @weuiBtnDisabledFontColor;
+  &.weui-btn_primary {
+    background-color: @weuiBtnPrimaryDisabledBg;
+  }
+}
+
+// tab
+.weui-tab {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  @weui-tab-bar-height: 53px;
+  > .weui-tabbar {
+    background-color: #F4F4F4;
+    > .weui-tabbar__item {
+      &.weui-bar__item_on {
+        > .weui-tabbar__label {
+          color: @weuiBtnPrimaryBg;
+        }
+      }
+    }
+  }
+
+  > .weui-tab__panel {
+    position: relative;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+
+    padding-bottom: @weui-tab-bar-height;
+    background: #EFEFEF;
+    flex: 1 1 auto;
+  }
+}

@@ -1,0 +1,36 @@
+.mixin-transition(@props, @duration:500ms) {
+  -webkit-transition: @props @duration;
+  -moz-transition: @props @duration;
+  -ms-transition: @props @duration;
+  -o-transition: @props @duration;
+  transition: @props @duration;
+}
+
+@size: 15px;
+.tree-node-indicator {
+  .mixin-transition(transform, 260ms);
+  transform: rotate(0deg);
+  width: @size;
+  height: @size;
+  line-height: @size;
+  text-align: center;
+  &.expand {
+    transform: rotate(90deg);
+  }
+}
+
+.node-children {
+  .mixin-transition(all, 260ms);
+
+  & > ul {
+    .mixin-transition(all, 260ms);
+    overflow: hidden;
+    opacity: 0.2;
+  }
+
+  &.expand {
+    & > ul {
+      opacity: 1;
+    }
+  }
+}
