@@ -19,17 +19,17 @@ const isStyleInvalidate = (prev, next) => {
   if (!prev && !next)
     return false;
 
-  if (!prev && next || prev && !next)
+  if ((!prev && next) || (prev && !next))
     return true;
 
   for (let prop in next) {
     if (!prev.hasOwnProperty(prop))
       return true;
-    if (prev[prop] != next[prop])
+    if (prev[prop] !== next[prop])
       return true;
   }
 
-  if (Object.keys(prev).length != Object.keys(next).length)
+  if (Object.keys(prev).length !== Object.keys(next).length)
     return true;
 
   return false;
@@ -65,7 +65,7 @@ function renderChildren(children, nextProps) {
   const last = Children.count(children) - 1;
   return Children.map(children, (child, idx) => {
     return idx !== last && isValidElement(child) ?
-        <child.type {...mergeProps(child.props, nextProps)}/> : child
+      <child.type {...mergeProps(child.props, nextProps)}/> : child
   });
 }
 
@@ -90,15 +90,14 @@ export class Group extends PureComponent {
     const nextProps       = {style: assignment(null, {marginRight: gap})};
     const [style, others] = commitProperties(props, {...base_style, flexWrap: 'wrap'});
     return (
-        <div className={cls} style={style} {...others}>
-          {gap ? renderChildren(props.children, nextProps) : props.children}
-        </div>
+      <div className={cls} style={style} {...others}>
+        {gap ? renderChildren(props.children, nextProps) : props.children}
+      </div>
     )
   }
 }
 
-Group
-    .propTypes = {
+Group.propTypes = {
   width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   flex: PropTypes.oneOfType([PropTypes.bool, PropTypes.string, PropTypes.number]),
@@ -130,9 +129,9 @@ export class HGroup extends PureComponent {
     const nextProps       = {style: assignment(null, {marginRight: gap})};
     const [style, others] = commitProperties(props, base_hgroup_style);
     return (
-        <div className={cls} style={style} {...others}>
-          {gap ? renderChildren(props.children, nextProps) : props.children}
-        </div>
+      <div className={cls} style={style} {...others}>
+        {gap ? renderChildren(props.children, nextProps) : props.children}
+      </div>
     )
   }
 }
@@ -168,9 +167,9 @@ export class VGroup extends PureComponent {
       verticalAlign: horizontalAlign, ...other
     }, base_vgroup_style);
     return (
-        <div className={cls} style={style} {...others}>
-          {gap ? renderChildren(props.children, nextProps) : props.children}
-        </div>
+      <div className={cls} style={style} {...others}>
+        {gap ? renderChildren(props.children, nextProps) : props.children}
+      </div>
     )
   }
 }

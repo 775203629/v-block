@@ -1,6 +1,6 @@
 {
   "name": "v-block",
-  "version": "0.0.1-v.x.i",
+  "version": "0.0.1-v.x.j",
   "author": "zonebond",
   "dependencies": {
     "axios": "^0.16.2",

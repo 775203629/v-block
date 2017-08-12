@@ -1,0 +1,25 @@
+/**
+ * Created by zonebond on 2017/4/27.
+ */
+
+// library
+const path = require('path');
+const fs   = require('fs');
+
+// variable
+const __src         = path.resolve('./src');
+const ignores_regex = /DS_Store|assets/;
+const directory     = fs.readdirSync(__src);
+const folders       = directory.filter(f => !ignores_regex.test(f));
+
+const EntryPoints = {};
+
+Object.defineProperty(EntryPoints, 'Entries', {
+  get: () => {
+    return folders.map(folder => {
+      return {entry: folder, uri: path.resolve(__src, folder)};
+    });
+  }
+});
+
+module.exports = EntryPoints;

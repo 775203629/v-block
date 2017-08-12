@@ -1,6 +1,6 @@
 {
   "name": "v-block",
-  "version": "0.0.1-vc.beta",
+  "version": "0.0.1-beta",
   "private": false,
   "author": "zonebond",
   "dependencies": {
@@ -27,7 +27,7 @@
   },
   "scripts": {
     "start": "yarn && node project-scripts start",
-    "build": "yarn && node project-scripts build && yarn run link",
+    "build": "yarn && node project-scripts build && cd ./build && ../project-scripts/bash/relink.sh",
     "link": "cd ./build && yarn unlink && yarn link",
     "test": "react-scripts test --env=jsdom",
     "push": "npm config set registry http://registry.npmjs.org/ && npm publish ./build --tag beta && npm config set registry http://registry.npm.taobao.org/"

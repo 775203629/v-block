@@ -7,7 +7,7 @@ import {RESTish, PM, Resource} from './rest-http'
 import * as ServiceTools from './service-tools'
 import {classnames, pixels, literal, assignment, merge, mergeProps, DuffsDevice} from './utils'
 import {RouterCtrl} from './ctrls'
-import ClassSymbol from './ClassSymbol'
+
 
 export {
   co,
@@ -15,6 +15,5 @@ export {
   ServiceTools,
   classnames, pixels, literal, assignment, merge, mergeProps, DuffsDevice,
   RESTish, PM, Resource,
-  RouterCtrl,
-  ClassSymbol
+  RouterCtrl
 }

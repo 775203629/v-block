@@ -2,35 +2,29 @@
  * Created by zonebond on 2017/6/12.
  */
 'use strict';
-const path               = require('path');
-const webpack            = require('webpack');
-const CommonsChunkPlugin = require('webpack').optimize.CommonsChunkPlugin;
-const HtmlWebpackPlugin  = require('html-webpack-plugin');
-const progressing        = require('../utils');
+const path        = require('path');
+const webpack     = require('webpack');
+const progressBar = require('../utils/progress-bar');
+const EntryPoints = require('../utils/entry-point');
 
-module.exports = function (config) {
-  config.cache = true;
+module.exports = function(config) {
+
+  // Progress Bar
+  progressBar(config);
 
   // Entries
-  const entryPoints = config.entry;
-  config.entry      = {
-    common: './src/common/index.js',
-    component: './src/component/index.js',
-    net: './src/net/index.js'
-  };
+  const entries  = EntryPoints.Entries;
+  const polyfill = path.resolve('node_modules/react-scripts/config/polyfills.js')
+  config.entry   = entries.reduce((acc, {entry, uri}) => {
+    acc[entry] = [polyfill, uri];
+    return acc;
+  }, {});
 
   // Output
   const output          = config.output;
   output.filename       = '[name].js';
   output.libraryTarget  = 'umd';
   output.umdNamedDefine = true;
-
-
-  // Plugins
-  const plugins = config.plugins;
-  plugins.splice(1, 1);
-  plugins.splice(2, 1); // remove uglifyjs plugin
-  plugins.splice(4, 1);
 
   // Rules
   const rules = config.module.rules;
@@ -78,6 +72,20 @@ module.exports = function (config) {
 
   // Externals
   config.externals = ['react', 'react-dom', 'mobx', 'mobx-react', 'prop-types'];
+
+  // Plugins
+  const plugins = config.plugins;
+
+  // remove html-webpack-plugin
+  plugins.splice(1, 1);
+
+  // re-conf UglifyJS :: NO-Uglify entry-point files
+  plugins[2].options.exclude = new RegExp(entries.map(({entry}) => `${entry}/index.js$`).join('|'));
+
+  // remove manifest-plugin
+  plugins.splice(4, 1);
+
+  //console.log(plugins);
 
   return true;
 };
