@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import uuid from 'uuid';
-import {ClassSymbol} from '../../common'
+import {ClassSymbol} from '../../library'
 
 @ClassSymbol('ListViewItemRender')
 class ListViewItemRender {

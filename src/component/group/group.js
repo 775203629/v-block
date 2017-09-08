@@ -64,9 +64,21 @@ function commitProperties(props, base) {
 function renderChildren(children, nextProps) {
   const last = Children.count(children) - 1;
   return Children.map(children, (child, idx) => {
-    return idx !== last && isValidElement(child) ?
-      <child.type {...mergeProps(child.props, nextProps)}/> : child
+    return idx !== last && isValidElement(child) ? wrappedChild(child, mergeProps(child.props, nextProps)) : child
   });
+}
+
+function wrappedChild(element, props) {
+	/**
+	const primitive_render = element.type.prototype.render;
+	element.type.prototype.render = function(){
+		const child_root = primitive_render.call(this)
+		console.log(child_root, this.props, style);
+		return React.cloneElement(child_root, {style: {...child_root.props.style, ...style}});
+	};
+	*/
+    
+	return <element.type {...props}/>
 }
 
 /**

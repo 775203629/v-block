@@ -6,6 +6,7 @@ const path        = require('path');
 const webpack     = require('webpack');
 const progressBar = require('../utils/progress-bar');
 const EntryPoints = require('../utils/entry-point');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = function(config) {
 
@@ -14,7 +15,7 @@ module.exports = function(config) {
 
   // Entries
   const entries  = EntryPoints.Entries;
-  const polyfill = path.resolve('node_modules/react-scripts/config/polyfills.js')
+  const polyfill = path.resolve('node_modules/react-scripts/config/polyfills.js');
   config.entry   = entries.reduce((acc, {entry, uri}) => {
     acc[entry] = [polyfill, uri];
     return acc;
@@ -53,17 +54,16 @@ module.exports = function(config) {
   // add custom svg loader-rule
   rules.push({
     test: /\.svg$/,
-    use: [
-      {loader: 'babel-loader'},
-      {
-        loader: 'react-svg-loader',
-        query: {
-          es5: true,
-          svgo: {plugins: [{removeTitle: false}], floatPrecision: 2},
-          name: 'static/media/[name].[hash:8].[ext]'
-        }
+    use: [{
+      loader: 'svg-react-loader',
+      options: {
+        filters: [function(value) {
+          delete value['t'];
+          delete value['pId'];
+          this.update(value)
+        }]
       }
-    ]
+    }]
   });
 
   // Babel
@@ -71,7 +71,7 @@ module.exports = function(config) {
   rules[3].options.plugins = ['transform-decorators-legacy'];
 
   // Externals
-  config.externals = ['react', 'react-dom', 'mobx', 'mobx-react', 'prop-types'];
+  config.externals = ['react', 'react-dom', 'mobx', 'mobx-react', 'prop-types', 'axios', 'quill'];
 
   // Plugins
   const plugins = config.plugins;
@@ -80,12 +80,24 @@ module.exports = function(config) {
   plugins.splice(1, 1);
 
   // re-conf UglifyJS :: NO-Uglify entry-point files
-  plugins[2].options.exclude = new RegExp(entries.map(({entry}) => `${entry}/index.js$`).join('|'));
+  plugins[2] = new UglifyJSPlugin({
+    parallel: true,
+    sourceMap: false,
+    uglifyOptions: {
+      compress: { warnings: false, comparisons: false, drop_debugger: true, keep_fnames: true},
+      output: { comments: false}
+    }
+  });
+  // const ens_index = entries.map(({entry}) => `${entry}/index`).join('|');
 
   // remove manifest-plugin
   plugins.splice(4, 1);
 
-  //console.log(plugins);
+  // test-non-uglifyJS
+  //plugins.splice(2, 1);
 
+  //console.log(plugins[2].options);
+
+  
   return true;
 };

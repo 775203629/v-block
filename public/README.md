@@ -1,14 +1,14 @@
 # Virtual-Block
 
-Please use 
+Please use
 ```
-npm install v-block@beta
+npm install v-block@latest
 ```
 because of v-block in development!
 
 
 ## Table of Modules
- 
+
 - [Common]
 
   - [block]
@@ -29,15 +29,15 @@ because of v-block in development!
   - [layout]
   - [others]
   - [loading]
-  
+
 - [Net]
 
   - [xhr-interceptor]
   - [fake-http]
-  
+
 - [Net]
 
   - [ClassSymbol]
-  - [EventObservasion]
+  - [EventObservation]
   - [ItemCollection]
-  - [ReactWatcherIC.js]
+  - [ReactWatcherIC]

@@ -88,18 +88,28 @@ if (XHR && !XHR.fakeWatching) {
     // const scheme =  FakeBackend.match(which.url);
     const scheme = typeof Interceptor.hook === 'function' ? Interceptor.hook(which.url) : null;
 
+    const next_process = () =>{
+    	if (scheme && which.status === 404) {
+          which.onerror();
+          which.abort();
+        } else {
+          rse_handle();
+        }
+    }
+
     if (which.onreadystatechange) {
       which.onreadystatechange = () => {
         // Interceptor response
-        if (which.readyState > 2) {
-          handleInterceptor(which, interceptions.response).then(done => {
-            if (scheme && which.status === 404) {
-              which.onerror();
-              which.abort();
-            } else {
-              rse_handle();
-            }
-          });
+        if (which.readyState === 3) {
+          const co_impact = handleInterceptor(which, interceptions.response, 'response');
+          if(co_impact){
+            co_impact.then(next_process);
+          }
+        }
+        
+        // last process
+        if (which.readyState === 4) {
+          next_process();
         }
       }
     }
@@ -169,7 +179,14 @@ if (XHR && !XHR.fakeWatching) {
     }
   };
 
-  function handleInterceptor(ctx, handles) {
+  function handleInterceptor(ctx, handles, phase) {
+  	const is_impact_phase = `__$_is_impact_${phase}_$__`;
+
+  	if(ctx[is_impact_phase])
+  		return null;
+
+  	ctx[is_impact_phase] = true;
+
     return co(function*(ctx) {
       const length = Array.isArray(handles) ? handles.length : 0;
       if (length) {
@@ -187,7 +204,7 @@ if (XHR && !XHR.fakeWatching) {
     const which   = this;
     which.payload = data;
 
-    handleInterceptor(which, interceptions.request).then(done => {
+    handleInterceptor(which, interceptions.request, 'request').then(done => {
       if (!which.__$fake_request$__) {
         which.__watch_hooks__.call(which);
       }

@@ -25,7 +25,8 @@ export default function ClassSymbol(type) {
       get: () => {
         return $$typeof;
       },
-      configurable: false
+      configurable: false,
+      enumerable: false
     });
 
     Object.defineProperty(target, `is${target.name}`, {})

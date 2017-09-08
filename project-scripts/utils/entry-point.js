@@ -5,6 +5,7 @@
 // library
 const path = require('path');
 const fs   = require('fs');
+const file = require('fs-extra');
 
 // variable
 const __src         = path.resolve('./src');
@@ -21,5 +22,13 @@ Object.defineProperty(EntryPoints, 'Entries', {
     });
   }
 });
+
+EntryPoints.LibraryExports = (paths) => {
+  const entries = EntryPoints.Entries;
+  while(entries.length){
+    const {entry, uri} = entries.shift();
+    file.copySync(`${uri}/exports.js`, `${paths.appBuild}/${entry}.js`, {dereference: true});
+  }
+};
 
 module.exports = EntryPoints;

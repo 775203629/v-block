@@ -1,6 +1,7 @@
 /**
  * Created by zonebond on 2017/4/27.
  */
+
 import {Group, HGroup, VGroup} from './group'
 import Icon from './others/icon'
 import {TreeView} from './tree-view'
@@ -11,7 +12,7 @@ import Loading from './loading'
 import {TextField} from './form'
 
 export {
-  Group, HGroup, VGroup,
+  Group, HGroup, VGroup, 
   Icon,
   TreeView,
   Editor,

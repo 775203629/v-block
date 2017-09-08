@@ -12,6 +12,8 @@ const NotNoop = prop => prop !== undefined && prop !== null && prop !== '' && pr
 const role_exp_star_str = /[\w@$%^&*(|)+-]+/.source;
 const role_exp_plus_str = /[^?]+/.source;
 
+let _stopped_ = false;
+
 class FakeHttpBackend {
   _mapping_ = {};
 
@@ -21,6 +23,10 @@ class FakeHttpBackend {
    * @returns {void|XML|string|*}
    */
   scheme(exp, cb) {
+  	if(_stopped_){
+      return exp;
+    }
+
     exp = exp.replace('?', '\\?');
     let role_exp_cc;
     for (let regular in cb) {
@@ -58,7 +64,10 @@ class FakeHttpBackend {
     return exp;
   }
 
-  match = function (exp) {
+  match = function(exp) {
+    if(_stopped_){
+      return null;
+    }
     const mapping = this._mapping_;
     const _exp_   = exp.replace(/\\/g, '');
     for (let rule in mapping) {
@@ -68,6 +77,10 @@ class FakeHttpBackend {
     }
     return null;
   }.bind(this);
+
+  Shotdown() {
+    _stopped_ = true;
+  };
 
   /**
    * Options is consist of Object Map which have request | response | error mapping function handles;

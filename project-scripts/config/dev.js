@@ -57,17 +57,16 @@ module.exports = function (config) {
   // add custom svg loader-rule
   rules.push({
     test: /\.svg$/,
-    use: [
-      {loader: 'babel-loader'},
-      {
-        loader: 'react-svg-loader',
-        query: {
-          es5: true,
-          svgo: {plugins: [{removeTitle: false}], floatPrecision: 2},
-          name: 'static/media/[name].[hash:8].[ext]'
-        }
+    use: [{
+      loader: 'svg-react-loader',
+      options: {
+        filters: [function(value) {
+          delete value['t'];
+          delete value['pId'];
+          this.update(value)
+        }]
       }
-    ]
+    }]
   });
 
   // Babel
